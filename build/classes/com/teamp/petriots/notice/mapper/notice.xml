@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.teamp.petriots.notice.dao.INoticeDAO">
+ 	<select id="getDataCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM NOTICE N JOIN REGISTER_ADMIN R
+		ON N.ADMIN_NUM = R.ADMIN_NUM
+		WHERE ${searchKey} LIKE '%'||#{searchValue}||'%' AND DELDATE IS NULL
+	</select>
+	
+	<insert id="insertData">
+		INSERT INTO NOTICE(NTC_NUM, ADMIN_NUM, SUBJECT, MAINTEXT)
+		VALUES(NOTICESEQ.NEXTVAL, #{adminNum}, #{subject}, #{maintext})
+	</insert>
+	
+	<!-- 게시글 목록 출력 -->
+	<select id="getLists" resultType="com.teamp.petriots.notice.dto.NoticeDTO">
+		SELECT *
+		FROM
+		(
+			SELECT ROWNUM RNUM, DATA.*
+			FROM
+			(
+				SELECT N.NTC_NUM AS NTCNUM, R.ID AS ADMINID, N.SUBJECT AS SUBJECT, N.VIEWS AS VIEWS, TO_CHAR(ISUDATE, 'YYYY-MM-DD') AS ISUDATE
+				FROM NOTICE N JOIN REGISTER_ADMIN R
+				ON N.ADMIN_NUM = R.ADMIN_NUM
+				WHERE ${searchKey} LIKE '%'||#{searchValue}||'%' AND DELDATE IS NULL
+				ORDER BY NTC_NUM DESC
+			) DATA
+		)
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+	</select>
+	
+	<update id="updateHitCount">
+		UPDATE NOTICE
+		SET VIEWS = VIEWS + 1
+		WHERE NTC_NUM = #{ntcNum}
+	</update>
+	
+	<select id="getReadData" resultType="com.teamp.petriots.notice.dto.NoticeDTO">
+		SELECT NTC_NUM as ntcNum, R.ID AS ADMINID, SUBJECT, MAINTEXT, VIEWS, ISUDATE
+		FROM NOTICE N JOIN REGISTER_ADMIN R
+		ON N.ADMIN_NUM = R.ADMIN_NUM
+		WHERE NTC_NUM = #{ntcNum}
+	</select>
+	
+	<update id="deleteData">
+		UPDATE NOTICE
+		SET DELDATE = SYSDATE
+		WHERE NTC_NUM = #{ntcNum}
+	</update>
+	
+	<update id="updateData">
+		UPDATE NOTICE
+		SET SUBJECT = #{subject}, MAINTEXT = #{maintext}
+		WHERE NTC_NUM = #{ntcNum}
+	</update>
+	
+	<select id="getBeforeNum" resultType="java.lang.Integer">
+		SELECT NVL(MAX(NTC_NUM), -1) AS BEFORENUM
+		FROM NOTICE
+		WHERE NTC_NUM &lt; #{ntcNum} AND DELDATE IS NULL
+	</select>
+	
+	<select id="getNextNum" resultType="java.lang.Integer">
+		SELECT NVL(MIN(NTC_NUM), -1) AS NEXTNUM
+		FROM NOTICE
+		WHERE NTC_NUM &gt; #{ntcNum} AND DELDATE IS NULL
+	</select>
+	
+	<select id="getAdminNum" resultType="java.lang.Integer">
+		SELECT ADMIN_NUM AS adminNum
+		FROM REGISTER_ADMIN
+		WHERE ID = #{adminId}
+	</select>
+ </mapper>

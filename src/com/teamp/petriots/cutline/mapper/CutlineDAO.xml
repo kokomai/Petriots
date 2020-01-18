@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.teamp.petriots.cutline.dao.ICutlineDAO">
+ 	
+ 	<!-- 체크 리스트 쿼리문 -->
+	<select id="list" resultType="com.teamp.petriots.cutline.dto.CutlineDTO">
+		SELECT CUTLINE_NUM, ADMIN_NUM, P_CL, I_CL, ISUDATE
+		FROM CUTLINE
+		ORDER BY CUTLINE_NUM
+	</select>
+	
+	<!-- 체크리스트 삭제 쿼리문 -->
+	<delete id="remove">
+		DELETE
+		FROM CUTLINE
+		WHERE CUTLINE_NUM=#{cutline_num}
+	</delete>
+	
+	<!-- 체크리스트 수정 쿼리문 -->
+	 <update id="modify">
+      UPDATE CUTLINE
+      SET CUTLINE_NUM=#{cutline_num}, ADMIN_NUM=#{admin_num}, P_CL=#{p_cl}, I_CL=#{i_cl}, ISUDATE=SYSDATE
+      WHERE CUTLINE_NUM = #{cutline_num}
+   </update> 
+   
+  
+ </mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.signup.dao.ISignupDAO">
+	
+	<select id="memberdata" resultType="com.teamp.petriots.signup.dto.SignupDTO">
+		SELECT USER_NUM, CRYPTPACK.DECRYPT(PWD, #{pwd}) AS PWD, USERID, USERNAME, SSN, ZIPCODE, ADDRESS, ADDRDETAILS, ADDRLAT, ADDRLONG, SUBSTR(TEL,1,3) AS TEL1, SUBSTR(TEL,5,4) AS TEL2, SUBSTR(TEL,10,4) AS TEL3, RTRIM(SUBSTR(EMAIL,0,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL1, LTRIM(SUBSTR(EMAIL,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL2, NICKNAME, SU_DATE, PROFILE_IMG
+		FROM SIGNUP
+		WHERE USER_NUM = #{user_num}
+	</select>
+	
+	<insert id="membermodify">
+		UPDATE SIGNUP
+		SET NICKNAME = #{nickName}, TEL = #{tel1} || '-' || #{tel2} || '-' || #{tel3}, ZIPCODE = #{zipcode}, ADDRESS = #{address}, ADDRDETAILS = #{addrdetails}
+  		, ADDRLAT = #{addrLat}, ADDRLONG = #{addrLong}, EMAIL=#{email1} || '@' || #{email2}
+		WHERE USER_NUM = #{user_num}
+	</insert>
+	
+	<select id="mypage" resultType="com.teamp.petriots.signup.dto.SignupDTO">
+		SELECT USER_NUM, PWD, USERID, USERNAME, SSN, ZIPCODE, ADDRESS, ADDRDETAILS, ADDRLAT, ADDRLONG, SUBSTR(TEL,1,3) AS TEL1, SUBSTR(TEL,5,4) AS TEL2, SUBSTR(TEL,10,4) AS TEL3, RTRIM(SUBSTR(EMAIL,0,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL1, LTRIM(SUBSTR(EMAIL,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL2, NICKNAME, SU_DATE, PROFILE_IMG
+		FROM SIGNUP
+		WHERE USER_NUM = #{user_num}
+	</select>
+	
+	<select id="mycount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM SIGNUP SU, PET_REGISTER PR, RSV_APPLY RA, RSV_CONFIRM RC, SIT_APPROVE SA, SIT S, SIT_COMPLETE SC
+		WHERE SC.S_NUM = S.S_NUM
+  		AND S.S_A_NUM = SA.S_A_NUM
+  		AND SA.R_C_NUM = RC.R_C_NUM
+  		AND RC.R_A_NUM = RA.R_A_NUM
+  		AND RA.P_R_NUM = PR.P_R_NUM
+  		AND PR.USER_NUM = SU.USER_NUM
+  		AND SU.USER_NUM = #{user_num}
+	</select>
+	
+	<select id="idsearch" resultType="java.lang.String">
+      SELECT NVL(USERID, '0') "USERID"
+      FROM SIGNUP RIGHT OUTER JOIN DUAL
+      ON USERNAME = '${userName}' AND SSN = '${ssn}'
+   </select>
+   
+   <select id="pwsearch" resultType="java.lang.String">
+      SELECT NVL(PWD, '0') "PWD"
+      FROM SIGNUP RIGHT OUTER JOIN DUAL
+      ON USERID = '${userId}' AND USERNAME = '${userName}' AND SSN = '${ssn}'
+   </select>
+   
+   <insert id="add">
+		INSERT INTO SIGNUP
+		(USER_NUM, PWD, USERID, USERNAME, SSN, ZIPCODE, ADDRESS
+		, ADDRDETAILS, ADDRLAT, ADDRLONG, TEL, EMAIL, NICKNAME)
+		VALUES
+		(SIGNUPSEQ.NEXTVAL , CRYPTPACK.ENCRYPT(#{pwd}, #{pwd})
+		, #{userId} , #{userName}
+		,  SUBSTR(#{ssn}, 1, 6) || '-' || SUBSTR(#{ssn}, 7, 7)
+		, #{zipcode}, #{address}, #{addrdetails}, #{addrLat}
+		, #{addrLong}, #{tel1} || '-' || #{tel2} || '-' || #{tel3}
+		, #{email1} || '@' || #{email2}, #{nickName})
+	</insert>
+	
+	<select id="getData" resultType="com.teamp.petriots.signup.dto.SignupDTO">
+		SELECT USER_NUM, PWD, USERID, USERNAME, SSN, ZIPCODE, ADDRESS, ADDRDETAILS, ADDRLAT, ADDRLONG, SUBSTR(TEL,1,3) AS TEL1, SUBSTR(TEL,5,4) AS TEL2, SUBSTR(TEL,10,4) AS TEL3, RTRIM(SUBSTR(EMAIL,0,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL1, LTRIM(SUBSTR(EMAIL,INSTR(EMAIL,'@',1,1)), '@') AS EMAIL2, NICKNAME, SU_DATE
+		FROM SIGNUP
+		WHERE USER_NUM = #{user_num}
+	</select>
+	
+	<!-- 관리자 영역 -->
+	<!-- 회원정보 리스트 쿼리문 -->
+   <select id="list" resultType="com.teamp.petriots.signup.dto.SignupDTO">
+	SELECT USER_NUM, USERID, PWD, USERNAME, TEL, EMAIL, NICKNAME
+	FROM SIGNUP
+	MINUS
+	SELECT S.USER_NUM, S.USERID, S.PWD, S.USERNAME, S.TEL, S.EMAIL, S.NICKNAME
+	FROM SIGNUP S, WITHDRAWAL W
+	WHERE W.USER_NUM = S.USER_NUM
+	ORDER BY USER_NUM
+   </select>
+   
+   <!-- 회원정보 삭제 쿼리문 직접 삭제가아닌 회원탈퇴 테이블에 정보를 추가하는것 -->
+   <insert id="deletemember">
+      INSERT INTO WITHDRAWAL(WD_NUM, ISUDATE, WD_R_NUM, DETAILS, USER_NUM)
+      VALUES(WITHDRAWALSEQ.NEXTVAL,  SYSDATE, 4, NULL,  #{user_num})
+   </insert>
+   
+   <!-- 회원정보 수정 쿼리문 -->
+    <update id="modifymember">
+      UPDATE SIGNUP
+      SET  USER_NUM=#{user_num}, USERID=#{userid}, PWD=#{pwd}, USERNAME=#{username}, TEL=#{tel}, EMAIL=#{email}, NICKNAME=#{nickname}
+      WHERE USER_NUM = #{user_num}
+   </update>
+
+	
+</mapper>

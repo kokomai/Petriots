@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.ccl_request.dao.ICcl_requestDAO">
+
+	   
+  <update id="checkok">
+   UPDATE CCL_CONFIRM 
+	SET EXCUTE = #{excute}
+	WHERE C_C_NUM = #{c_c_num}
+   </update>
+   
+   <select id="p_sitting_checklist" resultType="com.teamp.petriots.ccl_request.dto.Ccl_requestDTO">
+   SELECT CC.C_C_NUM AS "C_C_NUM", RA.R_A_NUM AS "R_A_NUM", CC.EXCUTE AS "EXCUTE", CC.VIDLINK AS "VIDLINK", CC.IMGLINK AS "IMGLINK", TO_CHAR(CC.TIME,'HH24:MI') AS "TIME"
+     , TO_CHAR(CR.CKSTTDATE, 'HH24:MI') AS "CKSTTDATE", TO_CHAR(CR.CKENDDATE, 'HH24:MI') AS "CKENDDATE", CR.MAINTEXT AS "MAINTEXT"
+     , CR.C_REQ_NUM AS "C_REQ_NUM"
+	FROM CCL_REQUEST CR, CCL_APPROVE CA, CCL_CONFIRM CC, RSV_APPLY RA
+	WHERE RA.R_A_NUM = CR.R_A_NUM
+	  AND CR.C_REQ_NUM = CA.C_REQ_NUM
+	  AND CA.C_A_NUM = CC.C_A_NUM
+	  AND RA.R_A_NUM = #{r_a_num}
+   </select>
+   
+   <insert id="cklistapply" parameterType="java.util.Map">
+		INSERT INTO CCL_REQUEST(C_REQ_NUM, R_A_NUM, A_T_NUM, CKSTTDATE, CKENDDATE, MAINTEXT)
+		SELECT CCL_REQUESTSEQ.NEXTVAL, (SELECT MAX(R_A_NUM) FROM RSV_APPLY), '1', A.* 
+		FROM(
+		<foreach item="item" collection="list" separator="UNION ALL ">
+			SELECT TO_DATE('${item.cksttdate}', 'HH24:MI') AS cksttdate, TO_DATE('${item.ckenddate}', 'HH24:MI') AS ckenddate, #{item.maintext} AS maintext
+			FROM DUAL
+		</foreach>
+		) A
+	</insert>
+	
+	<insert id="cklistapprove">
+	INSERT INTO CCL_APPROVE(C_A_NUM, C_REQ_NUM, ISUDATE, P_S_NUM)
+VALUES(CCL_APPROVESEQ.NEXTVAL
+      , (SELECT MAX(C_REQ_NUM) FROM CCL_REQUEST)
+      , SYSDATE
+      , (SELECT P_S_NUM
+        FROM RSV_APPLY
+        WHERE R_A_NUM = (SELECT MAX(R_A_NUM) FROM RSV_APPLY)) )
+	</insert>
+	
+	
+	<insert id="cklistconfirm">
+	INSERT INTO CCL_CONFIRM(C_C_NUM, C_A_NUM)
+	VALUES(CCL_CONFIRMSEQ.NEXTVAL 
+      ,(SELECT MAX(C_A_NUM) FROM CCL_APPROVE))
+	</insert>
+	
+	<!-- <insert id="cklistapply">
+   INSERT INTO CCL_REQUEST(C_REQ_NUM, CKSTTDATE, CKENDDATE, MAINTEXT, R_A_NUM, A_T_NUM)
+	VALUES(CCL_REQUESTSEQ.NEXTVAL, TO_DATE('${cksttdate}', 'HH24:MI'), TO_DATE('${ckenddate}', 'HH24:MI'), '${maintext}'
+	, (SELECT MAX(R_A_NUM)
+	FROM RSV_APPLY), '1')
+   </insert> -->
+	
+</mapper>

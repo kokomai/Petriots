@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.pet_register.dao.IPet_registerDAO">
+	
+	<select id="petlist" resultType="com.teamp.petriots.pet_register.dto.Pet_registerDTO">
+		SELECT P_R_NUM, NAME, SPEICES, USER_NUM, PET_IMG
+		FROM PET_REGISTER
+		WHERE DELDATE IS NULL
+		AND USER_NUM = #{user_num}
+	</select>
+	
+	<select id="mypetdata" resultType="com.teamp.petriots.pet_register.dto.Pet_registerDTO">
+		SELECT P_R_NUM, NAME, SPEICES, USER_NUM, PET_IMG
+		FROM PET_REGISTER
+		WHERE USER_NUM = #{user_num}
+		AND DELDATE IS NULL
+		AND ROWNUM = 1
+	</select>
+	
+	<select id="petdata" resultType="com.teamp.petriots.pet_register.dto.Pet_registerDTO">
+		SELECT PR.P_R_NUM"P_R_NUM", PR.NAME"NAME", PR.ISUDATE"ISUDATE", PR.ILLNESS"ILLNESS", PR.DRUG"DRUG", PR.ADDITIONAL"ADDITIONAL", PR.USER_NUM"USER_NUM", TO_CHAR(PR.BIRTH, 'YYYY-MM-DD')"BIRTH", PR.SPEICES"SPEICES", PR.PET_IMG"PET_IMG", PT.MAINTYPE"MAINTYPE", PT.SUBTYPE"SUBTYPE"
+      FROM PET_REGISTER PR, PET_TYPE PT
+      WHERE PR.P_T_NUM = PT.P_T_NUM
+      AND P_R_NUM = #{p_r_num}
+	</select>
+	
+	<select id="cklist" resultType="com.teamp.petriots.reg_my_ccl.dto.Reg_my_cclDTO">
+		SELECT R_M_C_NUM, P_R_NUM, STTTIME, ENDTIME, MAINTXT
+		FROM REG_MY_CCL
+		WHERE P_R_NUM = #{p_r_num}
+	</select>
+	
+	<insert id="petregister">
+		INSERT INTO PET_REGISTER(P_R_NUM, NAME, ILLNESS, DRUG, ADDITIONAL, SPEICES, USER_NUM, P_T_NUM, BIRTH)
+		VALUES(PET_REGISTERSEQ.NEXTVAL, #{name}, #{illness}, #{drug}, #{additional}, #{speices}, #{user_num}, #{p_t_num}, #{birth})
+	</insert>
+	
+	<update id="petmodify">
+		UPDATE PET_REGISTER
+		SET NAME = #{name}, P_T_NUM = #{p_t_num}, SPEICES = #{speices}, BIRTH = #{birth}, ILLNESS = #{illness}, DRUG = #{drug}, ADDITIONAL = #{additional}
+		WHERE P_R_NUM = #{p_r_num}
+	</update>
+	
+	<delete id="petccldelete">
+		DELETE
+		FROM REG_MY_CCL
+		WHERE P_R_NUM = #{p_r_num}
+	</delete>
+
+	<insert id="petcclregister" parameterType="java.util.Map">
+		INSERT INTO REG_MY_CCL(R_M_C_NUM, P_R_NUM, STTTIME, ENDTIME, MAINTXT)
+		SELECT REG_MY_CCLSEQ.NEXTVAL, A.* 
+		FROM(
+		<foreach item="item" collection="list" separator="UNION ALL ">
+			SELECT #{item.p_r_num} AS p_r_num, #{item.stttime} AS stttime, #{item.endtime} AS endtime, #{item.maintxt} AS maintxt
+			FROM DUAL
+		</foreach>
+		) A
+	</insert>
+	
+	<delete id="petdelete">
+		UPDATE PET_REGISTER
+		SET DELDATE = SYSDATE
+		WHERE P_R_NUM = #{p_r_num}
+	</delete>
+	
+</mapper>

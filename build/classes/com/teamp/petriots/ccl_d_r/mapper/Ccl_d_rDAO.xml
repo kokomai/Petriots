@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.teamp.petriots.ccl_d_r.dao.ICcl_d_rDAO">
+ 	
+ 	<!-- 체크 리스트 쿼리문 -->
+	<select id="list" resultType="com.teamp.petriots.ccl_d_r.dto.Ccl_d_rDTO">
+		SELECT C_D_R_NUM, C_D_NUM, MAINTEXT
+		FROM CCL_D_R
+		ORDER BY C_D_R_NUM
+	</select>
+	
+	<!-- 체크리스트 삭제 쿼리문 -->
+	<delete id="remove">
+		DELETE
+		FROM CCL_D_R
+		WHERE C_D_R_NUM=#{c_d_r_num}
+	</delete>
+	
+	<!-- 체크리스트 수정 쿼리문 -->
+	 <update id="modify">
+      UPDATE CCL_D_R
+      SET C_D_R_NUM=#{c_d_r_num}, C_D_NUM=#{c_d_num}, MAINTEXT=#{maintext}
+      WHERE C_D_R_NUM = #{c_d_r_num}
+   </update> 
+   
+  
+ </mapper>

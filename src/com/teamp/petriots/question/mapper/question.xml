@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.teamp.petriots.question.dao.IQuestionDAO">
+	<!-- 게시글의 갯수 세기(한 페이지) -->
+ 	<select id="getDataCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM QUESTION Q JOIN SIGNUP S
+		ON Q.USER_NUM = S.USER_NUM
+		WHERE ${searchKey} LIKE '%'||#{searchValue}||'%' AND DEL_DATE IS NULL
+	</select>
+	
+	<!-- 게시글 목록 출력 -->
+	<select id="getLists" resultType="com.teamp.petriots.question.dto.QuestionDTO">
+		SELECT *
+		FROM
+		(
+		    SELECT ROWNUM RNUM, DATA.*
+		    FROM
+		    (
+		        SELECT Q.Q_NUM AS qNum, Q.Q_SUBJECT AS qSubject, Q.MAINTEXT AS qMaintext, Q.VIEWS AS qViews, TO_CHAR(Q.ISUDATE, 'YYYY-MM-DD') AS qIsudate, S.USERID
+		        FROM QUESTION Q LEFT JOIN SIGNUP S
+		        ON Q.USER_NUM = S.USER_NUM
+		        WHERE ${searchKey} LIKE '%'||#{searchValue}||'%' AND DEL_DATE IS NULL
+		        ORDER BY Q.Q_NUM DESC
+		    ) DATA
+		)
+		WHERE RNUM BETWEEN #{start} AND #{end}
+		ORDER BY RNUM
+	</select>
+	
+	<insert id="insertData">
+		INSERT INTO QUESTION(Q_NUM, MAINTEXT, USER_NUM, VIEWS, Q_SUBJECT)
+		VALUES(QUESTIONSEQ.NEXTVAL, #{qMaintext}, #{qUserNum}, #{qViews}, #{qSubject})
+	</insert>
+	
+	<update id="updateData">
+		UPDATE QUESTION
+		SET Q_SUBJECT = #{qSubject}, MAINTEXT = #{qMaintext}
+		WHERE Q_NUM = #{qNum}
+	</update>
+
+	<!-- 트리거 QUESTION, ANSWER를 이용하여 -->
+	<!-- 질문 삭제 시 트리거를 이용하여 -->
+	<!-- 질문에 달린 댓글, 답글의 DELDATE를 -->
+	<!-- 업데이트하여 보이지 않게 한다. -->
+	<delete id="deleteData">
+		UPDATE QUESTION
+		SET DEL_DATE = SYSDATE
+		WHERE Q_NUM = #{qNum}
+	</delete>
+	
+	<update id="updateHitCount">
+		UPDATE QUESTION
+		SET VIEWS = VIEWS + 1
+		WHERE Q_NUM = #{qNum}
+	</update>
+	
+	<select id="getReadData" resultType="com.teamp.petriots.question.dto.QuestionDTO">
+		SELECT Q.Q_NUM AS qNum, Q.Q_SUBJECT AS qSubject, Q.MAINTEXT AS qMaintext, S.USERID, Q.VIEWS AS qViews, TO_CHAR(Q.ISUDATE, 'YYYY-MM-DD') AS qIsudate
+		FROM QUESTION Q LEFT JOIN SIGNUP S
+		ON Q.USER_NUM = S.USER_NUM
+		WHERE Q_NUM = #{qNum} AND DEL_DATE IS NULL
+	</select>
+	
+	<select id="getBeforeNum" resultType="java.lang.Integer">
+		SELECT NVL(MAX(Q_NUM), -1) AS BEFORENUM
+		FROM QUESTION
+		WHERE Q_NUM &lt; #{qNum} AND DEL_DATE IS NULL
+	</select>
+	
+	<select id="getNextNum" resultType="java.lang.Integer">
+		SELECT NVL(MIN(Q_NUM), -1) AS NEXTNUM
+		FROM QUESTION
+		WHERE Q_NUM &gt; #{qNum} AND DEL_DATE IS NULL
+	</select>
+	
+	<select id="getQNum" resultType="String">
+		SELECT USER_NUM as qUserNum
+		FROM SIGNUP
+		WHERE USERID = #{userId}
+	</select>
+	
+	<select id="getComment" resultType="com.teamp.petriots.question.dto.QuestionDTO">
+		SELECT NVL2(DELDATE, '댓글이 삭제되었습니다.', CONCAT(LPAD('└', 2*(LEVEL-1)), QC.MAINTEXT)) AS qCMaintext, Q_C_NUM AS QCNUM, QC.MAINTEXT AS oriQCMaintext, QC.USER_NUM AS USER_NUM, NVL2(DELDATE, 'Y', 'N') AS DELDATE 
+		FROM Q_COMMENT QC JOIN QUESTION Q
+		ON QC.Q_NUM = Q.Q_NUM
+		WHERE Q.Q_NUM = #{qNum}
+		START WITH QC.Q_C_PARENT_NUM IS NULL
+		CONNECT BY PRIOR QC.Q_C_NUM = QC.Q_C_PARENT_NUM
+	</select>
+	
+	<insert id="qCommentCreateOk">
+		INSERT INTO Q_COMMENT(Q_C_NUM, Q_NUM, USER_NUM, MAINTEXT, Q_C_PARENT_NUM)
+		VALUES(Q_COMMENTSEQ.NEXTVAL, #{qNum}, #{qCUserNum}, #{qCMaintext}, #{qCNum})
+	</insert>
+	
+	<update id="qCommentUpdated">
+		UPDATE Q_COMMENT
+		SET MAINTEXT = #{qCMaintext}
+		WHERE Q_C_NUM = #{qCNum}
+	</update>
+	
+	<update id="qqCommentDeleteOk">
+		UPDATE Q_COMMENT
+		SET DELDATE = SYSDATE
+		WHERE Q_C_NUM = #{qCNum}
+	</update>
+ </mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.withdrawal.dao.IWithdrawalDAO">
+	
+	<select id="withdrawaldata" resultType="com.teamp.petriots.withdrawal.dto.WithdrawalDTO">
+		SELECT USER_NUM, CRYPTPACK.DECRYPT(PWD, #{pwd}) AS PWD
+		FROM SIGNUP
+		WHERE USER_NUM = #{user_num}
+	</select>
+	
+	<select id="withdrawalreason" resultType="com.teamp.petriots.withdrawal.dto.WithdrawalDTO">
+		SELECT WD_R_NUM, REASON
+		FROM WD_REASON
+		ORDER BY WD_R_NUM
+	</select>
+	
+	<insert id="withdrawaladd">
+		INSERT INTO WITHDRAWAL(WD_NUM, WD_R_NUM, DETAILS, USER_NUM)
+		VALUES(WITHDRAWALSEQ.NEXTVAL, #{wd_r_num}, #{details}, #{user_num})
+	</insert>
+
+	
+</mapper>

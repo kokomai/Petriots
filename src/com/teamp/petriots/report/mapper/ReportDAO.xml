@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.teamp.petriots.report.dao.IReportDAO">
+	
+<!-- 신고 리스트 출력 -->	
+	<select id="list" resultType="com.teamp.petriots.report.dto.ReportDTO"> 		
+	SELECT REPORT.RPT_NUM, REPORT.REPORTER, REPORT.REPORTED, REPORT.ISUDATE, REPORT.DETAILS, REPORT.RPT_TYPE_NUM, SANCTIONS.SCT_NUM, SANCTIONS.ADMIN_NUM, SANCTIONS.SCT_TYPE_NUM, SANCTIONS.SCTDAY, SANCTIONS.S_ISUDATE
+	FROM REPORT, SANCTIONS
+	WHERE REPORT.RPT_NUM =  SANCTIONS.RPT_NUM(+)
+	</select>
+	
+
+	
+	<insert id="insert">
+	INSERT INTO SANCTIONS(SCT_NUM, ADMIN_NUM, RPT_NUM, SCT_TYPE_NUM, SCTDAY, S_ISUDATE)
+	VALUES(SANCTIONSSEQ.NEXTVAL, #{admin_num}, #{rpt_num}, #{sct_type_num}, #{sctday}, SYSDATE)
+	</insert>
+	
+</mapper>

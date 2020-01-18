@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.mtom_q.dao.IMtom_qDAO">
+	
+	<select id="questiondata" resultType="com.teamp.petriots.mtom_q.dto.Mtom_qDTO">
+		SELECT M_Q_T_NUM, TYPE
+		FROM MTOM_Q_TYPE
+		ORDER BY M_Q_T_NUM
+	</select>
+	
+	<insert id="sendquestion">
+		INSERT INTO MTOM_Q(M_Q_NUM, USER_NUM, MAINTEXT, M_Q_T_NUM)
+		VALUES(MTOM_QSEQ.NEXTVAL, #{user_num}, #{maintext}, #{m_q_t_num})
+	</insert>
+	
+	<!-- 1대1문의 리스트 쿼리문 -->
+	<select id="list" resultType="com.teamp.petriots.mtom_q.dto.Mtom_qDTO">
+	SELECT MTOM_Q.M_Q_NUM, MTOM_Q.USER_NUM, MTOM_Q.ISUDATE, MTOM_Q.MAINTEXT, MTOM_Q.M_Q_T_NUM, MTOM_Q.DELDATE, MTOM_A.M_A_NUM, MTOM_A.ADMIN_NUM, MTOM_A.A_MAINTEXT, MTOM_A.M_Q_NUM, MTOM_A.A_DELDATE, MTOM_A.A_ISUDATE 
+	FROM MTOM_Q, MTOM_A
+	WHERE MTOM_Q.M_Q_NUM = MTOM_A.M_Q_NUM(+)
+	</select>
+	
+	<update id="modify">
+      UPDATE MTOM_A
+      SET M_A_NUM=#{m_a_num}, ADMIN_NUM=#{admin_num}, A_MAINTEXT=#{a_maintext}, A_DELDATE=#{a_deldate}, A_ISUDATE=SYSDATE
+      WHERE M_A_NUM = #{m_a_num}
+   </update> 
+
+	
+	
+</mapper>

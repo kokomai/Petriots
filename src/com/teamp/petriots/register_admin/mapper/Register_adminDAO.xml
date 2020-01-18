@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.teamp.petriots.register_admin.dao.IRegister_adminDAO">
+ 	
+ 	<!-- 체크 리스트 쿼리문 -->
+	<select id="login" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM REGISTER_ADMIN
+		WHERE ID = #{id, jdbcType=VARCHAR}
+		AND PW = #{pw, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getData" resultType="com.teamp.petriots.register_admin.dto.Register_adminDTO">
+		SELECT ADMIN_NUM, ID, PW
+		FROM REGISTER_ADMIN
+		WHERE ID = #{id, jdbcType=VARCHAR}
+		AND PW = #{pw, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getDataForSession" resultType="com.teamp.petriots.register_admin.dto.Register_adminSessionInfo">
+		SELECT ADMIN_NUM, ID, PW
+		FROM REGISTER_ADMIN
+		WHERE ID = #{id, jdbcType=VARCHAR}
+		AND PW = #{pw, jdbcType=VARCHAR}
+	</select>
+	
+ </mapper>

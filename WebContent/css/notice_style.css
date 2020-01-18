@@ -1,0 +1,113 @@
+﻿@CHARSET "UTF-8";
+* 
+{
+	margin:0px;
+	padding:0px;
+}
+
+body 
+{
+	scrollbar-face-color: #FFFFFF;
+	scrollbar-highlight-color: #666666;
+	scrollbar-shadow-color: #666666;
+	scrollbar-3dlight-color: #FFFFFF;
+	scrollbar-arrow-color: #666666;
+	scrollbar-track-color: #ffffff;
+	scrollbar-darkshadow-color: #FFFFFF;
+	scrollbar-base-color: #FFFFFF;
+	font-size: 9pt;
+	font-family:돋움;
+}
+
+a 
+{
+	cursor: pointer;
+	color: #000000;
+	text-decoration: none;
+	font-size: 9pt;
+	line-height: 150%;
+}
+
+a:hover, a:active 
+{
+	font-size: 9pt;
+	color: #F28011;
+	text-decoration: underline;
+}
+
+ul 
+{
+	list-style: none;
+}
+
+td 
+{
+	font-size: 9pt;
+}
+
+.btn1 
+{
+	font-size: 9pt; 
+	color:rgb(0,0,0); 
+	background-color:rgb(245,245,245); 
+	line-height:16px; 
+	padding:1px 3px 1px 3px;
+}
+
+.btn2 
+{   
+	color:#000000;
+	font: normal 9pt '돋움','trebuchet ms',helvetica,sans-serif;
+	background-color:#E4E4E4;
+	border:1px solid;
+	border-color: #696 #363 #363 #696;
+	line-height:16px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffffff), to(#ffeeddaa0));
+	background: -moz-linear-gradient(top,  #ffffffff,  #ffeeddaa0);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeeddaa0');
+	padding:1px 6px 1px 6px;
+}
+
+.btn3 
+{
+	color:rgb(255,255,255);
+	font: normal 9pt '돋움','trebuchet ms',helvetica,sans-serif;
+	border: 1px solid;
+	background-color:#4C4C4C;
+	line-height:16px;
+	padding:1px 6px 1px 6px;
+}
+
+.boxTF 
+{ 
+	border:1px solid #666666; 
+	height:15px; 
+	margin-top:3px; 
+	padding:2px 2px 2px 2px; 
+	background-color:#ffffff; 
+	font-family:'돋움'; 
+	font-size:9pt; 
+}
+
+.boxTA 
+{ 
+	border:1px solid #666666; 
+	height:150px; 
+	margin-top:3px; 
+	padding:2px 2px 2px 2px; 
+	background-color:#ffffff; 
+	font-family:'돋움'; 
+	font-size:9pt; 
+}
+
+.selectField 
+{
+	border:1px solid #666666; 
+	background-color:#ffffff; 
+	font-family:돋움; 
+	font-size:9pt;
+}
+
+.line1 { height: 1px; font-size: 0pt; padding:0px; }
+.line2 { height: 2px; font-size: 0pt; padding:0px; }
+.line3 { height: 3px; font-size: 0pt; padding:0px; } 

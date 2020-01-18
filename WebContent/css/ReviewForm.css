@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+.star-select {
+    display: inline-block;
+    float: left;
+
+    height: 3em;
+    line-height: 3em;
+    vertical-align: middle;
+}
+
+/* Hidden inputs */
+.star-select__input {
+  display: none;
+}
+
+.star-select__star {
+  cursor: pointer;
+  display: inline-block;
+  height: 3em;
+  overflow: hidden;
+  float: right;
+}
+.star-select__star:before {
+  font-size: 1.9em;
+  content: '☆';
+  color: #343434;
+  -webkit-transition: color 0.5s;
+  -moz-transition: color 0.5s;
+  transition: color 0.5s;
+}
+
+/* Active state for star */
+input:checked ~ .star-select__star:before {
+  content: '★';
+  color: gold;
+}
+
+.review-form textarea{
+  display: block;
+  clear:both;
+
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  border-radius: 5px;
+}

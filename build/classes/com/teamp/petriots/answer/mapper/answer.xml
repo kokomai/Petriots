@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper  
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.teamp.petriots.answer.dao.IAnswerDAO">
+  	<select id="getList" resultType="com.teamp.petriots.answer.dto.AnswerDTO">
+	  	SELECT A.Q_NUM AS QNUM, A.A_NUM AS ANUM, A.MAINTEXT AS AMAINTEXT, S.USERID, TO_CHAR(A.ISUDATE, 'YYYY-MM-DD') AS AISUDATE
+		FROM ANSWER A JOIN SIGNUP S
+		ON A.USER_NUM = S.USER_NUM
+		WHERE A.Q_NUM = #{qNum} AND DELDATE IS NULL
+  	</select>
+  	
+  	<insert id="insertData">
+	  	INSERT INTO ANSWER(A_NUM, MAINTEXT, USER_NUM, Q_NUM)
+	  	VALUES(ANSWERSEQ.NEXTVAL, #{aMaintext}, #{aUserNum}, #{qNum})
+  	</insert>
+  	
+  	<update id="updateData">
+  		UPDATE ANSWER
+  		SET MAINTEXT = #{aMaintext}
+  		WHERE A_NUM = #{aNum}
+  	</update>
+  	  	
+  	<delete id="deleteData">
+  		UPDATE ANSWER
+		SET DELDATE = SYSDATE
+  		WHERE A_NUM = #{aNum}
+  	</delete>
+  	
+  	<select id="getReadData" resultType="com.teamp.petriots.answer.dto.AnswerDTO">
+		SELECT A.A_NUM AS ANUM, A.MAINTEXT AS AMAINTEXT, S.USERID
+		FROM ANSWER A LEFT JOIN SIGNUP S
+		ON A.USER_NUM = S.USER_NUM
+		WHERE A_NUM = #{aNum} AND DELDATE IS NULL
+	</select>
+  	
+  	<select id="getANum" resultType="java.lang.Integer">
+  		SELECT USER_NUM
+  		FROM SIGNUP
+  		WHERE USERID = #{userId}
+  	</select>
+  </mapper>

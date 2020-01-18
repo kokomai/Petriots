@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+*
+{
+   font-family: 맑은 고딕;
+   color: #343;
+}
+
+.tbl
+{
+   border-collapse: collapse;
+   width: 100%;
+}
+
+.tbl th, .tbl td
+{
+   border: 1px solid gray;
+   border-left: 0px;
+   border-right: 0px;
+   
+   padding: 3px;
+   line-height: 150%;
+}
+
+.tbl th
+{
+   font-weight: bold;
+   background-color: #EEE;
+}
+
+.btn
+{
+   font-weight: bold;
+   color: #0000a0;
+}
+
+.btn:hover
+{
+   color: hotpink;
+}
+
+.txt
+{
+   border-radius: 3px;
+}
+
+.txt:focus
+{
+   background-color: #eeeedd;
+}
+
+.txtNumber
+{
+   text-align: right;
+   border-radius: 3px;
+}
+
+.txtNumber:focus
+{
+   background-color: #eeeedd;
+}
+
+textarea
+{
+   font-family: 맑은 고딕;
+   font-weight: bold;
+}

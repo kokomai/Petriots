@@ -1,0 +1,240 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css?family=Lobster');
+@font-face {
+  font-family: 'ModernPictogramsNormal';
+  src: url("http://s202540075.onlinehome.us/codepen/fonts/modernpics-webfont.eot");
+  src: url("http://s202540075.onlinehome.us/codepen/fonts/modernpics-webfont.eot?#iefix") format("embedded-opentype"), url("http://s202540075.onlinehome.us/codepen/fonts/modernpics-webfont.woff") format("woff"), url("http://s202540075.onlinehome.us/codepen/fonts/modernpics-webfont.ttf") format("truetype"), url("http://s202540075.onlinehome.us/codepen/fonts/modernpics-webfont.svg#ModernPictogramsNormal") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 13, ../sass/screen.scss */
+body {
+  background: url("http://www.vancouverad.com/bgimg/img/noise_pattern_with_crosslines.png") repeat;
+  font-family: helvetica, arial, sans-serif;
+}
+
+/* line 17, ../sass/screen.scss */
+#wrapper {
+  width: 900px;
+  margin: 10px auto 0 auto;
+}
+
+/* line 22, ../sass/screen.scss */
+.cool_btn1 {
+  width: 190px;
+  height: 190px;
+  margin: 15px 15px 15px 15px;
+  position: relative;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 200px;
+  -ms-border-radius: 200px;
+  -o-border-radius: 200px;
+  border-radius: 200px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fafafa), color-stop(50%, #e3e3e3), color-stop(50%, #888888), color-stop(100%, #666666));
+  background-image: -webkit-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: -moz-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: -o-linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  background-image: linear-gradient(#fafafa, #e3e3e3 50%, #888888 50%, #666666);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+}
+/* line 31, ../sass/screen.scss */
+.cool_btn1 h1 {
+  text-align: center;
+  font-size: 50px;
+  margin: 20px 0 0 0;
+  color: #333;
+  text-shadow: 0 1px 0 white, 0 -1px 0 rgba(0, 0, 0, 0.5);
+  font-family: 'Lobster', cursive;
+  font-weight: normal;
+  line-height: 1;
+}
+/* line 40, ../sass/screen.scss */
+.cool_btn1 h1 i {
+  display: block;
+  font-style: normal;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: helvetica, arial, sans-serif;
+  text-shadow: none;
+}
+/* line 49, ../sass/screen.scss */
+.cool_btn1 h2 {
+  font-family: 'ModernPictogramsNormal', Arial, sans-serif;
+  font-weight: normal;
+  text-align: center;
+  font-size: 90px;
+  line-height: 1;
+  margin: 15px 0 0 0;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4), 0 -1px 0px rgba(0, 0, 0, 0.8);
+  color: #fafafa;
+}
+
+/* line 60, ../sass/screen.scss */
+.cool_btn1:after {
+  content: "";
+  width: 200px;
+  height: 200px;
+  display: block;
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  z-index: -1;
+  -webkit-border-radius: 200px;
+  -moz-border-radius: 200px;
+  -ms-border-radius: 200px;
+  -o-border-radius: 200px;
+  border-radius: 200px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #cecece), color-stop(100%, #e7e7e7));
+  background-image: -webkit-linear-gradient(#cecece, #e7e7e7);
+  background-image: -moz-linear-gradient(#cecece, #e7e7e7);
+  background-image: -o-linear-gradient(#cecece, #e7e7e7);
+  background-image: linear-gradient(#cecece, #e7e7e7);
+   -webkit-box-shadow: 0 1px 0px rgba(255, 255, 255, 0.9);
+  -moz-box-shadow: 0 1px 0px rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 0px rgba(255, 255, 255, 0.9);
+}
+
+/* -------------------
+Transitions
+-------------------- */
+/* line 76, ../sass/screen.scss */
+.cool_btn1.blue, .cool_btn1.teal, .cool_btn1.orange, .cool_btn1.green {
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.4s;
+  -moz-transition-duration: 0.4s;
+  -o-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+/* -------------------
+Colors
+-------------------- */
+/* line 84, ../sass/screen.scss */
+.cool_btn1.blue {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #577fbd), color-stop(100%, #274281));
+  background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #274281);
+  background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #274281);
+  background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #274281);
+  background-image: linear-gradient(#d5d5d5, #ffffff 50%, #577fbd 50%, #274281);
+}
+/* line 86, ../sass/screen.scss */
+.cool_btn1.blue h1 {
+  color: #4265A3;
+}
+/* line 89, ../sass/screen.scss */
+.cool_btn1.blue h2 {
+  color: #1E3261;
+}
+
+/* line 93, ../sass/screen.scss */
+.cool_btn1.teal {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #11b8fe), color-stop(100%, #0187b8));
+  background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #11b8fe 50%, #0187b8);
+  background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #11b8fe 50%, #0187b8);
+  background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #11b8fe 50%, #0187b8);
+  background-image: linear-gradient(#d5d5d5, #ffffff 50%, #11b8fe 50%, #0187b8);
+}
+/* line 95, ../sass/screen.scss */
+.cool_btn1.teal h1 {
+  color: #149EDB;
+}
+/* line 98, ../sass/screen.scss */
+.cool_btn1.teal h2 {
+  color: #0C6186;
+}
+
+/* line 102, ../sass/screen.scss */
+.cool_btn1.orange {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #f49e23), color-stop(100%, #e27619));
+  background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #f49e23 50%, #e27619);
+  background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #f49e23 50%, #e27619);
+  background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #f49e23 50%, #e27619);
+  background-image: linear-gradient(#d5d5d5, #ffffff 50%, #f49e23 50%, #e27619);
+}
+/* line 104, ../sass/screen.scss */
+.cool_btn1.orange h1 {
+  color: #e27619;
+}
+/* line 107, ../sass/screen.scss */
+.cool_btn1.orange h2 {
+  color: #AC5509;
+}
+
+/* line 111, ../sass/screen.scss */
+.cool_btn1.green {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #d5d5d5), color-stop(50%, #ffffff), color-stop(50%, #2fd51d), color-stop(100%, #00a01e));
+  background-image: -webkit-linear-gradient(#d5d5d5, #ffffff 50%, #2fd51d 50%, #00a01e);
+  background-image: -moz-linear-gradient(#d5d5d5, #ffffff 50%, #2fd51d 50%, #00a01e);
+  background-image: -o-linear-gradient(#d5d5d5, #ffffff 50%, #2fd51d 50%, #00a01e);
+  background-image: linear-gradient(#d5d5d5, #ffffff 50%, #2fd51d 50%, #00a01e);
+}
+/* line 113, ../sass/screen.scss */
+.cool_btn1.green h1 {
+  color: #00a01e;
+}
+/* line 116, ../sass/screen.scss */
+.cool_btn1.green h2 {
+  color: #006312;
+}
+
+/* -------------------
+Hover States
+-------------------- */
+/* line 123, ../sass/screen.scss */
+.cool_btn1.orange:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(255, 174, 0, 0.8);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(255, 174, 0, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(255, 174, 0, 0.8);
+}
+
+/* line 128, ../sass/screen.scss */
+.cool_btn1.teal:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(16, 216, 252, 0.8);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(16, 216, 252, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(16, 216, 252, 0.8);
+}
+
+/* line 133, ../sass/screen.scss */
+.cool_btn1.blue:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(43, 95, 187, 0.8);
+}
+
+/* line 138, ../sass/screen.scss */
+.cool_btn1.green:hover {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(47, 217, 29, 0.8);
+  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(47, 217, 29, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3), inset 0px 2px 5px rgba(0, 0, 0, 0.3), 0 0 28px 6px rgba(47, 217, 29, 0.8);
+}
+
+/* -------------------
+Media Queries
+-------------------- */
+@media screen and (max-width: 860px) {
+  /* line 147, ../sass/screen.scss */
+  #wrapper {
+    width: 700px;
+  }
+}
+@media screen and (max-width: 740px) {
+  /* line 152, ../sass/screen.scss */
+  #wrapper {
+    width: 480px;
+  }
+}
+@media screen and (max-width: 440px) {
+  /* line 157, ../sass/screen.scss */
+  #wrapper {
+    width: 370px;
+    text-align: center;
+  }
+}

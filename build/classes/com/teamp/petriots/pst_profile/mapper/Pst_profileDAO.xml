@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.pst_profile.dao.IPst_profileDAO">
+	
+	<select id="petsitterlist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+	SELECT USER_NUM, ADDRESS, DISTANCE_WGS84(ADDRLAT, ADDRLONG, #{addrLat}, #{addrLong}) AS DISTANCE, ADDRLAT, ADDRLONG, NICKNAME, PROFILE_IMG, PST_IMG1
+	FROM PETSITTER_VIEW
+	ORDER BY DISTANCE
+	</select>
+	
+	<select id="reservenowlist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT T.R_A_NUM, SU.USER_NUM, SU.NICKNAME, SU.ADDRESS, T.NAME, SU.PROFILE_IMG, T.PET_IMG
+      FROM(
+          SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, RA.ISUDATE, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC, SIT_APPROVE SA
+          WHERE RA.P_R_NUM = PR.P_R_NUM
+              AND RA.R_A_NUM = RC.R_A_NUM
+              AND RC.R_C_NUM = SA.R_C_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+          AND PS.USER_NUM = SU.USER_NUM
+      MINUS
+      SELECT T.R_A_NUM, SU.USER_NUM, SU.NICKNAME, SU.ADDRESS, T.NAME, SU.PROFILE_IMG, T.PET_IMG
+      FROM(
+          SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, RA.ISUDATE, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC, SIT_APPROVE SA, SIT S, SIT_COMPLETE SC
+          WHERE SC.S_NUM = S.S_NUM
+              AND S.S_A_NUM = SA.S_A_NUM
+              AND RA.P_R_NUM = PR.P_R_NUM
+              AND RA.R_A_NUM = RC.R_A_NUM
+              AND RC.R_C_NUM = SA.R_C_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+          AND PS.USER_NUM = SU.USER_NUM
+	</select>
+	
+	<select id="reserverequestlist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT T.*, SU.PROFILE_IMG, SU.NICKNAME, SU.ADDRESS, SU.USER_NUM
+      FROM(
+            SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR
+          WHERE RA.P_R_NUM = PR.P_R_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+       AND PS.USER_NUM = SU.USER_NUM
+        MINUS
+        SELECT T.*, SU.PROFILE_IMG, SU.NICKNAME, SU.ADDRESS, SU.USER_NUM
+      FROM(
+            SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC
+          WHERE RA.P_R_NUM = PR.P_R_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+                AND RC.R_A_NUM = RA.R_A_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+       AND PS.USER_NUM = SU.USER_NUM
+	</select>
+	
+	<select id="reservelist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT T.R_A_NUM, SU.USER_NUM, SU.NICKNAME, SU.ADDRESS, T.NAME, SU.PROFILE_IMG, T.PET_IMG
+      FROM(
+          SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, RA.ISUDATE, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC, SIT_APPROVE SA, SIT S, SIT_COMPLETE SC
+          WHERE SC.S_NUM = S.S_NUM
+              AND S.S_A_NUM = SA.S_A_NUM
+              AND RA.P_R_NUM = PR.P_R_NUM
+              AND RA.R_A_NUM = RC.R_A_NUM
+              AND RC.R_C_NUM = SA.R_C_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+          AND PS.USER_NUM = SU.USER_NUM
+	</select>
+	
+	<select id="reserveapprove" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT T.R_A_NUM, SU.USER_NUM, SU.NICKNAME, SU.ADDRESS, T.NAME, SU.PROFILE_IMG, T.PET_IMG
+      FROM(
+          SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, RA.ISUDATE, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC
+          WHERE  RA.P_R_NUM = PR.P_R_NUM
+              AND RA.R_A_NUM = RC.R_A_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+          AND PS.USER_NUM = SU.USER_NUM
+      MINUS
+      SELECT T.R_A_NUM, SU.USER_NUM, SU.NICKNAME, SU.ADDRESS, T.NAME, SU.PROFILE_IMG, T.PET_IMG
+      FROM(
+          SELECT RA.R_A_NUM, PR.P_R_NUM, PS.P_S_NUM, RA.ISUDATE, PR.NAME, PR.PET_IMG
+          FROM SIGNUP SU, RSV_APPLY RA, PST_SHIFT PS, PET_REGISTER PR, RSV_CONFIRM RC, SIT_APPROVE SA
+          WHERE   RA.P_R_NUM = PR.P_R_NUM
+              AND RA.R_A_NUM = RC.R_A_NUM
+              AND RC.R_C_NUM = SA.R_C_NUM
+              AND PS.P_S_NUM = RA.P_S_NUM
+              AND SU.USER_NUM = PR.USER_NUM
+              AND SU.USER_NUM = #{user_num}
+          ) T, PST_SHIFT PS, SIGNUP SU
+      WHERE T.P_S_NUM = PS.P_S_NUM
+          AND PS.USER_NUM = SU.USER_NUM
+	</select>
+	
+	<select id="favoritelist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT SU.ADDRESS AS "ADDRESS", SU.NICKNAME AS "NICKNAME", SU.PROFILE_IMG AS "PROFILE_IMG"
+      FROM FAVORITES F, PST_SHIFT PS, SIGNUP SU
+      WHERE F.P_S_NUM = PS.P_S_NUM
+      AND PS.USER_NUM = SU.USER_NUM
+      AND F.USER_NUM = #{user_num}
+	</select>
+	
+	<!--                                                                                                                                  -->
+	
+	<select id="favoritemember" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT SU.USER_NUM AS "USER_NUM", SU.NICKNAME AS "NICKNAME", SU.PROFILE_IMG AS "PROFILE_IMG"
+		FROM FAVORITES F, PST_SHIFT PS, SIGNUP SU
+		WHERE F.USER_NUM = SU.USER_NUM
+		AND F.P_S_NUM = PS.P_S_NUM
+		AND PS.USER_NUM = #{user_num}
+	</select>
+	
+	<select id="blockmember" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT SU.USER_NUM AS "USER_NUM", SU.NICKNAME AS "NICKNAME", B.ISUDATE AS "ISUDATE", SU.PROFILE_IMG AS "PROFILE_IMG"
+		FROM BLOCK B, PST_SHIFT PS, SIGNUP SU
+		WHERE B.USER_NUM = SU.USER_NUM
+		AND B.P_S_NUM = PS.P_S_NUM
+		AND PS.USER_NUM = #{user_num}
+	</select>
+	
+	<!-- 블랙리스트 삭제  -->
+	<delete id="blockmemberRemove">
+	DELETE
+	FROM BLOCK
+	WHERE USER_NUM = #{user_num}
+	</delete>
+	
+	<select id="questlist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT Q.QUEST_NUM AS "QUEST_NUM", Q.LINK AS "Q_LINK", Q.Q_NAME AS "Q_NAME",Q.CONDITION AS "Q_CONDITION", QL.USE AS "Q_USE"
+		FROM QUEST Q ,QUEST_CPL QL, PST_SHIFT PS, SIGNUP SU
+		WHERE Q.QUEST_NUM = QL.QUEST_NUM
+		  AND QL.P_S_NUM = PS.P_S_NUM
+		  AND PS.USER_NUM =  SU.USER_NUM
+		  AND SU.USER_NUM = #{user_num} 
+	</select>
+	
+	
+	<update id="questListOk">
+		UPDATE QUEST_CPL
+		SET USE = #{q_use}
+		WHERE QUEST_NUM = #{quest_num}
+		  AND P_S_NUM = #{p_s_num}
+	</update>
+	
+		<select id="mypetsitterdata" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+		SELECT SU.USER_NUM AS "USER_NUM", SU.NICKNAME AS "NICKNAME", PP.CHECKIN_START AS "CHECKIN_START", SU.USERNAME AS "USERNAME",
+       PP.CHECKIN_END AS"CHECKIN_END" , PP.CHECKOUT_START AS"CHECKOUT_START", PP.CHECKOUT_END AS "CHECKOUT_END",
+       PP.PRICE AS"PRICE", PP.RECORDS AS"RECORDS", PP.INTRODUCE AS "INTRODUCE", PP.BEAUTY AS"BEAUTY", 
+       PP.WALK AS"WALK", PP.SNACK AS"SNACK", PP.OTHER_ANIMAL AS"OTHER_ANIMAL", PP.FAMILY AS"FAMILY",
+       PP.KIDS AS "KIDS", PP.GARDEN AS"GARDEN", PP.PICK_UP AS"PICK_UP" , PP.MEDICATION AS"MEDICATION",
+       PP.MAX_SITABLE AS"MAX_SITABLE", PP.B_TYPE_NUM AS "B_TYPE_NUM" , PP.P_S_NUM AS "P_S_NUM",
+       PP.PST_IMG1 AS"PST_IMG1",
+       SU.PROFILE_IMG AS "PROFILE_IMG", PP.P_S_P_NUM AS"P_S_P_NUM"
+		FROM SIGNUP SU, PST_SHIFT PS, PST_PROFILE PP
+		WHERE PP.P_S_NUM = PS.P_S_NUM
+		AND PS.USER_NUM = SU.USER_NUM
+		AND PS.USER_NUM = #{user_num}
+	</select>
+	
+	<select id="countendreserve" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS "COUNT"
+		FROM SIGNUP SU, PST_SHIFT PS, PET_REGISTER PR, RSV_APPLY RA, RSV_CONFIRM RC, SIT_APPROVE SA
+		WHERE SA.R_C_NUM = RC.R_C_NUM
+		AND RC.R_A_NUM = RA.R_A_NUM
+		AND RA.P_S_NUM = PS.P_S_NUM
+		AND RA.P_R_NUM = PR.P_R_NUM
+		AND PR.USER_NUM = SU.USER_NUM
+		AND PS.USER_NUM = #{user_num}
+	</select> 
+	
+	      <insert id="petsitterprofileadd">
+	  INSERT INTO PST_PROFILE
+      (P_S_P_NUM, CHECKIN_START, CHECKIN_END, CHECKOUT_START, 
+      CHECKOUT_END, PRICE, RECORDS, INTRODUCE, BEAUTY, WALK, 
+      SNACK, OTHER_ANIMAL, FAMILY, KIDS, GARDEN, PICK_UP, MEDICATION, 
+      MAX_SITABLE, B_TYPE_NUM, P_S_NUM)
+      VALUES(PST_PROFILESEQ.NEXTVAL, #{p_s_p_num},#{checkin_start},
+      #{checkin_end},#{checkout_start},#{checkout_end},#{price},
+      #{records},#{introduce},#{beauty},#{walk},
+      #{snack},#{other_animal},#{family},#{kids},#{garden},#{pick_up},#{medication},
+      #{max_sitable},#{b_type_num},#{p_s_num})
+
+   </insert>
+   
+    <update id="petsitterprofilemodify">
+   UPDATE PST_PROFILE
+   SET CHECKIN_START = #{checkin_start}, CHECKIN_END = #{checkin_end}, 
+      CHECKOUT_START= #{checkout_start}, CHECKOUT_END = #{checkout_end},
+      PRICE = #{price}, RECORDS = #{records}, INTRODUCE = #{introduce}, 
+      BEAUTY = #{beauty}, WALK = #{walk}, SNACK = #{snack}, OTHER_ANIMAL = #{other_animal}, 
+      FAMILY = #{family}, KIDS = #{kids}, GARDEN = #{garden}, PICK_UP = #{pick_up},
+      MEDICATION = #{medication}, MAX_SITABLE = #{max_sitable}, B_TYPE_NUM = #{b_type_num}
+   WHERE P_S_NUM = #{p_s_num}
+   </update>
+   
+   <select id="searchpetsitterlist" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+    SELECT SU.ADDRESS AS "ADDRESS" , PP.MAX_SITABLE AS "MAX_SITABLE", SU.NICKNAME AS "NICKNAME"
+   FROM SIGNUP SU, PST_SHIFT PS, PST_PROFILE PP 
+   WHERE PP.P_S_NUM = PS.P_S_NUM
+   AND   PS.USER_NUM = SU.USER_NUM
+   AND   ADDRESS LIKE '%' || #{address} || '%'
+   AND   MAX_SITABLE &gt;= #{max_sitable}
+   </select>
+	
+      <select id="reserveDetail" resultType ="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+       SELECT SU.USER_NUM AS "USER_NUM", SU.NICKNAME AS "NICKNAME", PP.CHECKIN_START AS "CHECKIN_START", SU.USERNAME AS "USERNAME",
+      PP.CHECKIN_END AS"CHECKIN_END" , PP.CHECKOUT_START AS"CHECKOUT_START", PP.CHECKOUT_END AS "CHECKOUT_END",
+      PP.PRICE AS"PRICE", PP.RECORDS AS"RECORDS", PP.INTRODUCE AS "INTRODUCE", PP.BEAUTY AS"BEAUTY", 
+      PP.WALK AS"WALK", PP.SNACK AS"SNACK", PP.OTHER_ANIMAL AS"OTHER_ANIMAL", PP.FAMILY AS"FAMILY",
+      PP.KIDS AS "KIDS", PP.GARDEN AS"GARDEN", PP.PICK_UP AS"PICK_UP" , PP.MEDICATION AS"MEDICATION",
+      PP.MAX_SITABLE AS"MAX_SITABLE", PP.B_TYPE_NUM AS "B_TYPE_NUM", B.B_TYPE AS "B_TYPE" , PP.P_S_NUM AS "P_S_NUM",
+      PP.PST_IMG1 AS"PST_IMG1",
+      SU.PROFILE_IMG AS "PROFILE_IMG", PP.P_S_P_NUM AS"P_S_P_NUM", SU.ZIPCODE AS"ZIPCODE", SU.ADDRDETAILS AS"ADDRDETAILS",
+      SU.ADDRLAT AS "ADDRLAT", SU.ADDRLONG AS "ADDRLONG", SU.ADDRESS AS"ADDRESS"
+      FROM SIGNUP SU, PST_SHIFT PS, PST_PROFILE PP, B_TYPE B
+      WHERE PP.P_S_NUM = PS.P_S_NUM
+      AND B.B_TYPE_NUM = PP.B_TYPE_NUM
+      AND PS.USER_NUM = SU.USER_NUM
+      AND PS.USER_NUM = #{user_num}
+   </select>
+   
+   <insert id="insertFavorite">
+      INSERT INTO FAVORITES(USER_NUM, P_S_NUM, ISUDATE) VALUES(#{user_num}, #{p_s_num}, SYSDATE)
+   </insert>
+   
+   <delete id="deleteFavorite">
+      DELETE FROM FAVORITES
+      WHERE USER_NUM = #{user_num}
+      AND P_S_NUM = #{p_s_num}
+   </delete>
+   
+   <select id="checkFavorite" resultType="com.teamp.petriots.pst_profile.dto.Pst_profileDTO">
+   SELECT USER_NUM, P_S_NUM
+   FROM FAVORITES
+   WHERE USER_NUM = #{user_num}
+   AND P_S_NUM = #{p_s_num}
+   </select>
+	
+</mapper>

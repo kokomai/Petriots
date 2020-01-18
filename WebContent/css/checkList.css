@@ -1,0 +1,146 @@
+@charset "UTF-8";
+
+body
+{
+ margin:0 auto;
+ padding:0px;
+ text-align:center;
+ width:100%;
+ font-family: "Myriad Pro","Helvetica Neue",Helvetica,Arial,Sans-Serif;
+
+}
+#wrapper
+{
+ margin:0 auto;
+ padding:0px;
+ text-align:center;
+ width:995px;
+ margin-top:40px
+}
+#wrapper .rowadd{
+  margin-top:40px;
+  font-size:12px;
+  padding:10px 10px
+}
+#wrapper .buttondel{
+  margin-left:20px;
+  width:40px;
+  font-size:16px
+}
+#wrapper h1
+{
+ margin-top:50px;
+ font-size:45px;
+ color:#9A7D0A;
+}
+#wrapper h1 p
+{
+ font-size:18px;
+}
+#employee_table input[type="text"]
+{
+ width:120px;
+ height:55px;
+ padding-left:10px;
+}
+#employee_table input[type="number"]
+{
+ width:80px;
+ height:35px;
+ padding-left:10px;
+}
+#form_div input[type="button"]
+{
+ 
+ height:35px;
+ background-color:#DA3B50;
+ border:none;
+ border-bottom:3px solid #8B0000;
+ border-radius:3px;
+ color:white;
+
+}
+#form_div input[type="submit"]
+{
+ margin-top:10px;
+ width:110px;
+ height:35px;
+ background-color:#DA3B50;
+ border:none;
+ border-bottom:3px solid #8B0000	;
+ border-radius:3px;
+ color:white;
+}
+
+#employee_table input {
+margin-top:5px;
+margin-left:5px
+}
+
+input[type=text]:focus{
+  outline: 2px solid #DA3B50;   
+}
+input[type=number]:focus{
+  outline: 2px solid #DA3B50;    
+}
+.css-label-red {
+  background-image: url(http://codeopus.net/file/blog/check2.png);
+}
+.css-label {
+  background-image: url(http://codeopus.net/file/blog/check1.png);
+}
+.checkbox.custom {
+  float: left;
+  margin: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+input[type="checkbox"].custom {
+  margin-left: 0;
+  padding: 0;
+}
+
+input[type=checkbox].css-checkbox {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0px;
+  border: 0;
+}
+
+input[type=checkbox].css-checkbox+label.css-label,
+input[type=checkbox].css-checkbox+label.css-label-red
+ {
+  padding-left: 70px;
+  height: 65px;
+  display: inline-block;
+  line-height: 70px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  font-size: 15px;
+  vertical-align: middle;
+  cursor: pointer;
+  opacity: 1;
+}
+
+input[type=checkbox].css-checkbox+label.css-label:hover,
+input[type=checkbox].css-checkbox+label.css-label-red:hover{
+}
+
+input[type=checkbox].css-checkbox:checked+label.css-label,
+input[type=checkbox].css-checkbox:checked+label.css-label-red{
+  background-position: 0 -66px;
+}
+.timefont{
+
+  height: 55px;
+  width: 150px;
+  font-size: 16pt;
+
+}

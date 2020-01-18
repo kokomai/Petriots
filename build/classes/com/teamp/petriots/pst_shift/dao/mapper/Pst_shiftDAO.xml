@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.teamp.petriots.pst_shift.dao.IPst_shiftDAO">
+	
+	<insert id="selectRandomPersonalityQuestion">
+		INSERT INTO CONDUCT_P(C_P_T_NUM, USER_NUM, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18, Q19, Q20)
+		SELECT CONDUCT_PSEQ.NEXTVAL, #{user_num}, R.Q1, R.Q2, R.Q3, R.Q4, R.Q5, R.Q6, R.Q7, R.Q8, R.Q9, R.Q10
+	    , R.Q11, R.Q12, R.Q13, R.Q14, R.Q15, R.Q16, R.Q17, R.Q18, R.Q19, R.Q20
+		FROM SELECT_RANDOM_QUESTION R
+	</insert>
+	
+	<select id="conductPersonalityQuestion" resultType="com.teamp.petriots.pst_shift.dto.Conduct_pDTO">
+		SELECT C_P_T_NUM ,USER_NUM ,ISUDATE ,Q1 ,Q2 ,Q3 ,Q4 ,Q5 ,Q6 ,Q7 ,Q8 ,Q9 ,Q10 ,Q11 ,Q12 ,Q13 ,Q14 ,Q15 ,Q16 ,Q17 ,Q18 ,Q19 ,Q20 
+		FROM CONDUCT_P
+		WHERE USER_NUM = #{user_num}
+        AND ISUDATE = (SELECT MAX(ISUDATE) FROM CONDUCT_P WHERE USER_NUM = #{user_num})
+	</select>
+	
+	<select id="getP_q_bData" resultType="com.teamp.petriots.pst_shift.dto.P_q_bDTO"> 
+		SELECT P_T_Q_NUM ,MAINTEXT ,ADMIN_NUM ,CORRECT ,
+			CHIOCE1 ,CHIOCE2 ,CHIOCE3 ,CHIOCE4 ,CHIOCE5 
+		FROM P_Q_B
+		WHERE P_T_Q_NUM = (SELECT #{question}
+						FROM CONDUCT_P
+						WHERE USER_NUM = #{user_num}
+						AND ISUDATE = (SELECT MAX(ISUDATE) 
+									FROM CONDUCT_P
+									WHERE USER_NUM = #{user_num}
+										)
+							)
+	</select>
+	
+	<insert id="insertPersonalityTestAnswer">
+		INSERT INTO SOLVE_P(S_P_T_NUM, C_P_T_NUM, ISUDATE, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)
+		VALUES (SOLVE_PSEQ.NEXTVAL, #{c_p_t_num}, SYSDATE, #{a1}, #{a2}, #{a3}, #{a4}, #{a5}, #{a6}, #{a7}, #{a8}, #{a9}
+		, #{a10}, #{a11}, #{a12}, #{a13}, #{a14} , #{a15}, #{a16}, #{a17}, #{a18}, #{a19}, #{a20})
+	</insert>
+	
+	<select id="getSolve_pData" resultType="com.teamp.petriots.pst_shift.dto.Solve_pDTO">
+		SELECT S_P_T_NUM ,C_P_T_NUM ,ISUDATE ,A1 ,A2 ,A3 ,A4 ,A5 ,A6 ,A7 ,A8 ,A9 ,A10 ,
+		A11 ,A12 ,A13 ,A14 ,A15 ,A16 ,A17 ,A18 ,A19 ,A20 
+		FROM SOLVE_P
+		WHERE C_P_T_NUM = #{c_p_t_num}
+	</select>
+	
+	<insert id="insertMarkingTestPersonalityTest">
+		INSERT INTO MARKING_P(M_P_T_NUM, S_P_T_NUM, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10
+		,T11, T12, T13, T14, T15, T16, T17, T18, T19, T20)
+		SELECT MARKING_PSEQ.NEXTVAL
+		, #{s_p_t_num}
+		, DECODE(A1, C1, 5, 0)
+		, DECODE(A2, C2, 5, 0)
+		, DECODE(A3, C3, 5, 0)
+		, DECODE(A4, C4, 5, 0)
+		, DECODE(A5, C5, 5, 0)
+		, DECODE(A6, C6, 5, 0)
+		, DECODE(A7, C7, 5, 0)
+		, DECODE(A8, C8, 5, 0)
+		, DECODE(A9, C9, 5, 0)
+		, DECODE(A10, C10, 5, 0)
+		, DECODE(A11, C11, 5, 0)
+		, DECODE(A12, C12, 5, 0)
+		, DECODE(A13, C13, 5, 0)
+		, DECODE(A14, C14, 5, 0)
+		, DECODE(A15, C15, 5, 0)
+		, DECODE(A16, C16, 5, 0)
+		, DECODE(A17, C17, 5, 0)
+		, DECODE(A18, C18, 5, 0)
+		, DECODE(A19, C19, 5, 0)
+		, DECODE(A20, C20, 5, 0)
+		FROM VIEW_INSERT_MARKING_P
+		WHERE C_P_T_NUM = #{c_p_t_num}
+	</insert>
+	
+	<select id="getMarking_pData" resultType="com.teamp.petriots.pst_shift.dto.Marking_pDTO">
+		SELECT M_P_T_NUM ,S_P_T_NUM ,T1 ,T2 ,T3 ,T4 ,T5 ,T6 ,T7 ,T8 ,T9 ,T10 ,
+		T11 ,T12 ,T13 ,T14 ,T15 ,T16 ,T17 ,T18 ,T19 ,T20 
+		FROM MARKING_P
+		WHERE S_P_T_NUM = #{s_p_t_num}
+	</select>
+	
+	<select id="getCutLine" resultType="com.teamp.petriots.pst_shift.dto.CutlineDTO">
+		SELECT CUTLINE_NUM ,ADMIN_NUM ,P_CL ,I_CL ,ISUDATE 
+		FROM CUTLINE
+		WHERE ISUDATE = (SELECT MAX(ISUDATE) 
+                    	FROM CUTLINE
+                    	)
+	</select>
+	
+	<insert id="insertPass_p">
+		INSERT INTO PASS_P(P_P_T_NUM,M_P_T_NUM,ISUDATE,CUTLINE) VALUES (PASS_PSEQ.NEXTVAL, #{m_p_t_num}, SYSDATE, #{cutline_num})
+	</insert>
+	
+	<select id="getPass_pData" resultType="com.teamp.petriots.pst_shift.dto.Pass_pDTO">
+		SELECT P_P_T_NUM, CUTLINE, M_P_T_NUM, ISUDATE
+		FROM PASS_P
+		WHERE M_P_T_NUM = #{m_p_t_num}
+	</select>
+	
+	<insert id="insertPass_t">
+		INSERT INTO PASS_T(P_S_NUM,P_P_T_NUM,P_I_T_NUM,ISUDATE) VALUES (PASS_TSEQ.NEXTVAL, #{p_p_t_num}, '0', SYSDATE)
+	</insert>
+	
+	<select id="getPass_t" resultType="com.teamp.petriots.pst_shift.dto.Pass_tDTO">
+		SELECT P_S_NUM, P_P_T_NUM, P_I_T_NUM, ISUDATE 
+		FROM PASS_T
+		WHERE P_P_T_NUM = #{p_p_t_num}
+		AND P_I_T_NUM = #{p_i_t_num}
+	</select>
+	
+	<insert id="insertPst_shift">
+		INSERT INTO PST_SHIFT(P_S_NUM, USER_NUM) VALUES (#{p_s_num}, #{user_num})
+	</insert>
+	
+	
+		
+</mapper>
